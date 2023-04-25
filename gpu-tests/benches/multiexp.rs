@@ -1,6 +1,5 @@
 use std::sync::Arc;
 
-use blstrs::Bls12;
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
 use ec_gpu_gen::{
     multiexp::MultiexpKernel, multiexp_cpu::SourceBuilder, rust_gpu_tools::Device,
@@ -8,12 +7,14 @@ use ec_gpu_gen::{
 };
 use ff::{Field, PrimeField};
 use group::{Curve, Group};
-use pairing::Engine;
+use halo2curves::bn256;
+use halo2curves::bn256::{Bn256, Fr};
+use halo2curves::pairing::Engine;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 
 /// The power that will be used to define the maximum number of elements. The number of elements
 /// is `2^MAX_ELEMENTS_POWER`.
-const MAX_ELEMENTS_POWER: usize = 29;
+const MAX_ELEMENTS_POWER: usize = 30;
 /// The maximum number of elements for this benchmark.
 const MAX_ELEMENTS: usize = 1 << MAX_ELEMENTS_POWER;
 
@@ -28,16 +29,16 @@ fn bench_multiexp(crit: &mut Criterion) {
         .map(|device| ec_gpu_gen::program!(device))
         .collect::<Result<_, _>>()
         .expect("Cannot create programs!");
-    let mut kern = MultiexpKernel::<<Bls12 as Engine>::G1Affine>::create(programs, &devices)
+    let mut kern = MultiexpKernel::<<Bn256 as Engine>::G1Affine>::create(programs, &devices)
         .expect("Cannot initialize kernel!");
     let pool = Worker::new();
     let max_bases: Vec<_> = (0..MAX_ELEMENTS)
         .into_par_iter()
-        .map(|_| <Bls12 as Engine>::G1::random(rand::thread_rng()).to_affine())
+        .map(|_| <Bn256 as Engine>::G1::random(rand::thread_rng()).to_affine())
         .collect();
     let max_exponents: Vec<_> = (0..MAX_ELEMENTS)
         .into_par_iter()
-        .map(|_| <Bls12 as Engine>::Fr::random(rand::thread_rng()).to_repr())
+        .map(|_| <Bn256 as Engine>::Scalar::random(rand::thread_rng()).to_repr())
         .collect();
 
     let num_elements: Vec<_> = (10..MAX_ELEMENTS_POWER).map(|shift| 1 << shift).collect();

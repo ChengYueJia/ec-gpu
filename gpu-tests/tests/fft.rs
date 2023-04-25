@@ -2,7 +2,6 @@
 
 use std::time::Instant;
 
-use blstrs::Scalar as Fr;
 use ec_gpu_gen::{
     fft::FftKernel,
     fft_cpu::{parallel_fft, serial_fft},
@@ -10,6 +9,7 @@ use ec_gpu_gen::{
     threadpool::Worker,
 };
 use ff::{Field, PrimeField};
+use halo2curves::bn256::Fr;
 
 fn omega<F: PrimeField>(num_coeffs: usize) -> F {
     // Compute omega, the 2^exp primitive root of unity
@@ -36,7 +36,7 @@ pub fn gpu_fft_consistency() {
         .expect("Cannot create programs!");
     let mut kern = FftKernel::<Fr>::create(programs).expect("Cannot initialize kernel!");
 
-    for log_d in 1..=20 {
+    for log_d in 19..=30 {
         let d = 1 << log_d;
 
         let mut v1_coeffs = (0..d).map(|_| Fr::random(&mut rng)).collect::<Vec<_>>();
@@ -44,7 +44,7 @@ pub fn gpu_fft_consistency() {
         let mut v2_coeffs = v1_coeffs.clone();
         let v2_omega = v1_omega;
 
-        println!("Testing FFT for {} elements...", d);
+        println!("Testing FFT for {} elements... k={}", d, log_d);
 
         let mut now = Instant::now();
         kern.radix_fft_many(&mut [&mut v1_coeffs], &[v1_omega], &[log_d])

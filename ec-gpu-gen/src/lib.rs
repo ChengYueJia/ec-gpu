@@ -11,10 +11,10 @@
 //! In this example we will make use of the FFT functionality. Add to your `build.rs`:
 //!
 //! ```no_run
-//! use blstrs::Scalar;
+//! use halo2curves::bn256::Fr;
 //! use ec_gpu_gen::SourceBuilder;
 //!
-//! let source_builder = SourceBuilder::new().add_fft::<Scalar>();
+//! let source_builder = SourceBuilder::new().add_fft::<Fr>();
 //! ec_gpu_gen::generate(&source_builder);
 //! ```
 //!

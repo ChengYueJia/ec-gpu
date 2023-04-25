@@ -12,25 +12,24 @@ license = "MIT/Apache-2.0"
 publish = false
 
 [dev-dependencies]
-blstrs = { version = "0.7.0", features = ["__private_bench"] }
+halo2curves = { git = 'https://github.com/ChengYueJia/halo2curves.git', branch = "feat/ec-gpu"}
 criterion = "0.4"
 ec-gpu = "0.2"
 ec-gpu-gen = { path = "../ec-gpu-gen", default-features = false }
 ff = { version = "0.13.0", default-features = false }
 fil_logger = "0.1.6"
 group = "0.13.0"
-pairing = "0.23.0"
 rand = "0.8"
 rayon = "1.5.3"
 
 [build-dependencies]
-blstrs = { version = "0.7.0", features = ["__private_bench"] }
+halo2curves = { git = 'https://github.com/ChengYueJia/halo2curves.git', branch = "feat/ec-gpu"}
 ec-gpu-gen = { path = "../ec-gpu-gen" }
 
 [features]
 default = ["cuda", "opencl"]
-cuda = ["blstrs/gpu", "ec-gpu-gen/cuda"]
-opencl = ["blstrs/gpu", "ec-gpu-gen/opencl"]
+cuda = ["halo2curves/gpu", "ec-gpu-gen/cuda"]
+opencl = ["halo2curves/gpu", "ec-gpu-gen/opencl"]
 
 [[bench]]
 name = "multiexp"

@@ -13,7 +13,7 @@ cargo test
 By default `cuda` and `opencl` is enabled. If you want to run the tests/benchmarks with either of those, you can do so:
 
 ```console
-cargo test --no-default-features --features opencl
+cargo test --no-default-features --features cuda
 ```
 
 ## License

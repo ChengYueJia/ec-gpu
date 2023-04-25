@@ -122,6 +122,7 @@ mod tests {
 
     use blstrs::Scalar as Fr;
     use ff::PrimeField;
+    use halo2curves::bn256::Fr;
     use rand_core::RngCore;
 
     fn omega<F: PrimeField>(num_coeffs: usize) -> F {

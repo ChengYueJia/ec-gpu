@@ -1,4 +1,5 @@
 #![allow(missing_docs)]
+
 use std::convert::TryInto;
 use std::io;
 use std::iter;
@@ -363,7 +364,8 @@ mod tests {
 
     use blstrs::Bls12;
     use group::Curve;
-    use pairing::Engine;
+    use halo2curves::bn256::{Bn256, Fr};
+    use halo2curves::pairing::Engine;
     use rand::Rng;
     use rand_core::SeedableRng;
     use rand_xorshift::XorShiftRng;
@@ -388,12 +390,12 @@ mod tests {
         const SAMPLES: usize = 1 << 14;
 
         let rng = &mut rand::thread_rng();
-        let v: Vec<<Bls12 as Engine>::Fr> = (0..SAMPLES)
-            .map(|_| <Bls12 as Engine>::Fr::random(&mut *rng))
+        let v: Vec<<Bn256 as Engine>::Scalar> = (0..SAMPLES)
+            .map(|_| <Bn256 as Engine>::Scalar::random(&mut *rng))
             .collect();
         let g = Arc::new(
             (0..SAMPLES)
-                .map(|_| <Bls12 as Engine>::G1::random(&mut *rng).to_affine())
+                .map(|_| <Bn256 as Engine>::G1::random(&mut *rng).to_affine())
                 .collect::<Vec<_>>(),
         );
 
