@@ -12,7 +12,7 @@ use ff::{Field, PrimeField};
 use group::Curve;
 use group::{prime::PrimeCurveAffine, Group};
 use halo2curves::{
-    bn256::{Bn256, Fr},
+    bn256::Bn256,
     pairing::Engine,
 };
 

@@ -1,3 +1,4 @@
+#![cfg(any(feature = "cuda", feature = "opencl"))]
 use std::sync::Arc;
 
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
@@ -7,8 +8,7 @@ use ec_gpu_gen::{
 };
 use ff::{Field, PrimeField};
 use group::{Curve, Group};
-use halo2curves::bn256;
-use halo2curves::bn256::{Bn256, Fr};
+use halo2curves::bn256::Bn256;
 use halo2curves::pairing::Engine;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 

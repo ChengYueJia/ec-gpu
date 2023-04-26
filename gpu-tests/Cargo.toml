@@ -34,3 +34,7 @@ opencl = ["halo2curves/gpu", "ec-gpu-gen/opencl"]
 [[bench]]
 name = "multiexp"
 harness = false
+
+[[bench]]
+name = "fft"
+harness = false
