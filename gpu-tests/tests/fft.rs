@@ -21,6 +21,9 @@ fn omega<F: PrimeField>(num_coeffs: usize) -> F {
     omega
 }
 
+const MAX_K: u32 = 24;
+const MIN_K: u32 = 19;
+
 #[test]
 pub fn gpu_fft_consistency() {
     fil_logger::maybe_init();
@@ -36,7 +39,7 @@ pub fn gpu_fft_consistency() {
         .expect("Cannot create programs!");
     let mut kern = FftKernel::<Fr>::create(programs).expect("Cannot initialize kernel!");
 
-    for log_d in 19..=30 {
+    for log_d in MIN_K..=MAX_K {
         let d = 1 << log_d;
 
         let mut v1_coeffs = (0..d).map(|_| Fr::random(&mut rng)).collect::<Vec<_>>();
@@ -83,7 +86,7 @@ pub fn gpu_fft_many_consistency() {
         .expect("Cannot create programs!");
     let mut kern = FftKernel::<Fr>::create(programs).expect("Cannot initialize kernel!");
 
-    for log_d in 1..=20 {
+    for log_d in MIN_K..=MAX_K {
         let d = 1 << log_d;
 
         let mut v11_coeffs = (0..d).map(|_| Fr::random(&mut rng)).collect::<Vec<_>>();

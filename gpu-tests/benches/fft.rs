@@ -7,8 +7,9 @@ use group::Group;
 use halo2curves::bn256::{Bn256, Fr};
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 /// The power that will be used to define the maximum number of elements. The number of elements
-/// is `2^MAX_ELEMENTS_POWER`.
-const MAX_ELEMENTS_POWER: u32 = 30;
+/// is `2^MAX_K`.
+const MAX_K: usize = 24;
+const MIN_K: usize = 19;
 
 fn omega<F: PrimeField>(num_coeffs: usize) -> F {
     // Compute omega, the 2^exp primitive root of unity
@@ -33,7 +34,7 @@ fn bench_fft(crit: &mut Criterion) {
         .expect("Cannot create programs!");
     let mut kern = FftKernel::<Fr>::create(programs).expect("Cannot initialize kernel!");
 
-    let num_elements: Vec<u32> = (10..MAX_ELEMENTS_POWER).map(|shift| 1 << shift).collect();
+    let num_elements: Vec<u32> = (MIN_K..=MAX_K).map(|shift| 1 << shift).collect();
     for num in num_elements {
         let mut coeffs = (0..num)
             .into_par_iter()

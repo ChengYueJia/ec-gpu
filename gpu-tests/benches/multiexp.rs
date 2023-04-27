@@ -1,4 +1,6 @@
 #![cfg(any(feature = "cuda", feature = "opencl"))]
+
+use std::char::MAX;
 use std::sync::Arc;
 
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
@@ -13,10 +15,11 @@ use halo2curves::pairing::Engine;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 
 /// The power that will be used to define the maximum number of elements. The number of elements
-/// is `2^MAX_ELEMENTS_POWER`.
-const MAX_ELEMENTS_POWER: usize = 30;
+/// is `2^MAX_K`.
+const MAX_K: usize = 24;
+const MIN_K: usize = 19;
 /// The maximum number of elements for this benchmark.
-const MAX_ELEMENTS: usize = 1 << MAX_ELEMENTS_POWER;
+const MAX_ELEMENTS: usize = 1 << MAX_K;
 
 fn bench_multiexp(crit: &mut Criterion) {
     let mut group = crit.benchmark_group("multiexp");
@@ -41,7 +44,7 @@ fn bench_multiexp(crit: &mut Criterion) {
         .map(|_| <Bn256 as Engine>::Scalar::random(rand::thread_rng()).to_repr())
         .collect();
 
-    let num_elements: Vec<_> = (10..MAX_ELEMENTS_POWER).map(|shift| 1 << shift).collect();
+    let num_elements: Vec<_> = (MIN_K..=MAX).map(|shift| 1 << shift).collect();
     for num in num_elements {
         group.bench_with_input(BenchmarkId::from_parameter(num), &num, |bencher, &num| {
             let (bases, skip) = SourceBuilder::get((Arc::new(max_bases[0..num].to_vec()), 0));

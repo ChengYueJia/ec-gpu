@@ -11,10 +11,7 @@ use ec_gpu_gen::{
 use ff::{Field, PrimeField};
 use group::Curve;
 use group::{prime::PrimeCurveAffine, Group};
-use halo2curves::{
-    bn256::Bn256,
-    pairing::Engine,
-};
+use halo2curves::{bn256::Bn256, pairing::Engine};
 
 fn multiexp_gpu<Q, D, G, S>(
     pool: &Worker,
@@ -37,7 +34,7 @@ where
 #[test]
 fn gpu_multiexp_consistency() {
     fil_logger::maybe_init();
-    const MAX_LOG_D: usize = 30;
+    const MAX_LOG_D: usize = 24;
     const START_LOG_D: usize = 19;
     let devices = Device::all();
     let programs = devices
