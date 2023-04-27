@@ -42,8 +42,8 @@ fn bench_fft(crit: &mut Criterion) {
             .collect::<Vec<_>>();
         let omega = omega::<Fr>(coeffs.len());
 
-        group.bench_with_input(BenchmarkId::from_parameter(num), &num, |bencher, &num| {
-            bencher.iter(|| {
+        group.bench_function(BenchmarkId::new("k", num), |b| {
+            b.iter(|| {
                 black_box(kern.radix_fft(&mut coeffs, &omega, num).unwrap());
             })
         });

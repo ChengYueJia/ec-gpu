@@ -46,11 +46,11 @@ fn bench_multiexp(crit: &mut Criterion) {
 
     let num_elements: Vec<_> = (MIN_K..=MAX).map(|shift| 1 << shift).collect();
     for num in num_elements {
-        group.bench_with_input(BenchmarkId::from_parameter(num), &num, |bencher, &num| {
-            let (bases, skip) = SourceBuilder::get((Arc::new(max_bases[0..num].to_vec()), 0));
-            let exponents = Arc::new(max_exponents[0..num].to_vec());
+        let (bases, skip) = SourceBuilder::get((Arc::new(max_bases[0..num].to_vec()), 0));
+        let exponents = Arc::new(max_exponents[0..num].to_vec());
 
-            bencher.iter(|| {
+        group.bench_function(BenchmarkId::new("k", num), |b| {
+            b.iter(|| {
                 black_box(
                     kern.multiexp(&pool, bases.clone(), exponents.clone(), skip)
                         .unwrap(),
