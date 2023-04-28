@@ -23,7 +23,7 @@
 //! Those variables are then picked up by the `ec_gpu_gen::program!()` macro, which generates a program, for a given GPU device. Using FFT within your library would then look like this:
 //!
 //! ```no_compile
-//! use blstrs::Scalar;
+//! use halo2curves::bn256::Fr as Scalar;
 //! use ec_gpu_gen::{
 //!     rust_gpu_tools::Device,
 //! };

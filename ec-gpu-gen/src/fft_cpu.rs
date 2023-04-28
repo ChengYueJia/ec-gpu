@@ -120,7 +120,6 @@ mod tests {
 
     use std::cmp::min;
 
-    use blstrs::Scalar as Fr;
     use ff::PrimeField;
     use halo2curves::bn256::Fr;
     use rand_core::RngCore;
