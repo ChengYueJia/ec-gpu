@@ -34,8 +34,8 @@ fn bench_fft(crit: &mut Criterion) {
         .expect("Cannot create programs!");
     let mut kern = FftKernel::<Fr>::create(programs).expect("Cannot initialize kernel!");
 
-    let num_elements: Vec<u32> = (MIN_K..=MAX_K).map(|shift| 1 << shift).collect();
-    for num in num_elements {
+    for k in MIN_K..=MAX_K {
+        let num = 1 << shift;
         let mut coeffs = (0..num)
             .into_par_iter()
             .map(|_| Fr::random(rand::thread_rng()))
@@ -44,7 +44,7 @@ fn bench_fft(crit: &mut Criterion) {
 
         group.bench_function(BenchmarkId::new("k", num), |b| {
             b.iter(|| {
-                black_box(kern.radix_fft(&mut coeffs, &omega, num).unwrap());
+                black_box(kern.radix_fft(&mut coeffs, &omega, k).unwrap());
             })
         });
         drop(coeffs);

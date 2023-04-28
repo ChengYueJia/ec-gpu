@@ -44,7 +44,7 @@ fn bench_multiexp(crit: &mut Criterion) {
         .map(|_| <Bn256 as Engine>::Scalar::random(rand::thread_rng()).to_repr())
         .collect();
 
-    let num_elements: Vec<_> = (MIN_K..=MAX).map(|shift| 1 << shift).collect();
+    let num_elements: Vec<_> = (MIN_K..=MAX_K).map(|shift| 1 << shift).collect();
     for num in num_elements {
         let (bases, skip) = SourceBuilder::get((Arc::new(max_bases[0..num].to_vec()), 0));
         let exponents = Arc::new(max_exponents[0..num].to_vec());

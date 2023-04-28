@@ -25,7 +25,7 @@ Notes:
 Generating CUDA/OpenCL codes for `blstrs` Scalar elements:
 
 ```rust
-use blstrs::Scalar;
+use halo2curves::bn256::Fr as Scalar;
 use ec_gpu_gen::SourceBuilder;
 
 let source = SourceBuilder::new()
@@ -42,7 +42,7 @@ In order to make things easier to use, there are helper functions available. You
 In this example we will make use of the FFT functionality. Add to your `build.rs`:
 
 ```rust
-use blstrs::Scalar;
+use halo2curves::bn256::Fr as Scalar;
 use ec_gpu_gen::SourceBuilder;
 
 fn main() {
