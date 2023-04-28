@@ -9,6 +9,8 @@ fn main() {
     let source_builder = SourceBuilder::new()
         .add_fft::<Fr>()
         .add_multiexp::<G1Affine, Fq>()
+        .add_multiexp::<G1Affine, Fq2>()
+        .add_multiexp::<G2Affine, Fq>()
         .add_multiexp::<G2Affine, Fq2>();
     ec_gpu_gen::generate(&source_builder);
 }
