@@ -21,6 +21,40 @@ fn omega<F: PrimeField>(num_coeffs: usize) -> F {
     omega
 }
 
+fn bench_fft_many(crit: &mut Criterion) {
+    let mut group = crit.benchmark_group("fft_many");
+    // The difference between runs is so little, hence a low sample size is OK.
+    group.sample_size(10);
+
+    let devices = Device::all();
+    let programs = devices
+        .iter()
+        .map(|device| ec_gpu_gen::program!(device))
+        .collect::<Result<_, _>>()
+        .expect("Cannot create programs!");
+    let mut kern = FftKernel::<Fr>::create(programs).expect("Cannot initialize kernel!");
+
+    for k in MIN_K..=MAX_K {
+        let num = 1 << k;
+        let mut coeffs = (0..num)
+            .into_par_iter()
+            .map(|_| Fr::random(rand::thread_rng()))
+            .collect::<Vec<_>>();
+        let omega = omega::<Fr>(coeffs.len());
+
+        group.bench_function(BenchmarkId::new("k", k), |b| {
+            b.iter(|| {
+                black_box(
+                    kern.radix_fft_many(&mut [&mut coeffs], &[omega], &[k])
+                        .unwrap(),
+                );
+            })
+        });
+        drop(coeffs);
+    }
+    group.finish();
+}
+
 fn bench_fft(crit: &mut Criterion) {
     let mut group = crit.benchmark_group("fft");
     // The difference between runs is so little, hence a low sample size is OK.
@@ -42,7 +76,7 @@ fn bench_fft(crit: &mut Criterion) {
             .collect::<Vec<_>>();
         let omega = omega::<Fr>(coeffs.len());
 
-        group.bench_function(BenchmarkId::new("k", num), |b| {
+        group.bench_function(BenchmarkId::new("k", k), |b| {
             b.iter(|| {
                 black_box(kern.radix_fft(&mut coeffs, &omega, k).unwrap());
             })
@@ -52,5 +86,5 @@ fn bench_fft(crit: &mut Criterion) {
     group.finish();
 }
 
-criterion_group!(benches, bench_fft);
+criterion_group!(benches, bench_fft, bench_fft_many);
 criterion_main!(benches);
