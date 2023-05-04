@@ -44,12 +44,12 @@ fn bench_multiexp(crit: &mut Criterion) {
         .map(|_| <Bn256 as Engine>::Scalar::random(rand::thread_rng()).to_repr())
         .collect();
 
-    let num_elements: Vec<_> = (MIN_K..=MAX_K).map(|shift| 1 << shift).collect();
-    for num in num_elements {
+    for k in MIN_K..=MAX_K {
+        let num = 1 << k;
         let (bases, skip) = SourceBuilder::get((Arc::new(max_bases[0..num].to_vec()), 0));
         let exponents = Arc::new(max_exponents[0..num].to_vec());
 
-        group.bench_function(BenchmarkId::new("k", num), |b| {
+        group.bench_function(BenchmarkId::new("k", k), |b| {
             b.iter(|| {
                 black_box(
                     kern.multiexp(&pool, bases.clone(), exponents.clone(), skip)
