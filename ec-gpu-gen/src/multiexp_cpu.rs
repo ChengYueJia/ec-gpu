@@ -362,7 +362,6 @@ where
 mod tests {
     use super::*;
 
-    use blstrs::Bls12;
     use group::Curve;
     use halo2curves::bn256::{Bn256, Fr};
     use halo2curves::pairing::Engine;
