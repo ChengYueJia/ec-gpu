@@ -34,8 +34,7 @@ yastl = "0.1.2"
 #blstrs = { version = "0.7.0", features = ["__private_bench", "gpu"] }
 rand = "0.8"
 lazy_static = "1.2"
-pairing = "0.23.0"
-halo2curves = { git = 'https://github.com/ChengYueJia/halo2curves.git', branch = "feat/ec-gpu"}
+halo2curves = { git = 'https://github.com/ChengYueJia/halo2curves.git', branch = "feat/ec_gpu/v0_3_1"}
 temp-env = "0.3.0"
 rand_core = "0.6.3"
 rand_xorshift = "0.3.0"
