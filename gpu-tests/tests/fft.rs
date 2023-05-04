@@ -14,7 +14,7 @@ use halo2curves::bn256::Fr;
 fn omega<F: PrimeField>(num_coeffs: usize) -> F {
     // Compute omega, the 2^exp primitive root of unity
     let exp = (num_coeffs as f32).log2().floor() as u32;
-    let mut omega = F::ROOT_OF_UNITY;
+    let mut omega = F::root_of_unity();
     for _ in exp..F::S {
         omega = omega.square();
     }
