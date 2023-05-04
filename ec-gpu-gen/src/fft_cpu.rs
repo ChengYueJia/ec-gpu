@@ -33,7 +33,7 @@ pub fn serial_fft<F: PrimeField>(a: &mut [F], omega: &F, log_n: u32) {
 
         let mut k = 0;
         while k < n {
-            let mut w = F::ONE;
+            let mut w = F::one();
             for j in 0..m {
                 let mut t = a[(k + j + m) as usize];
                 t *= w;
@@ -67,7 +67,7 @@ pub fn parallel_fft<F: PrimeField>(
 
     let num_threads = 1 << log_threads;
     let log_new_n = log_n - log_threads;
-    let mut tmp = vec![vec![F::ZERO; 1 << log_new_n]; num_threads];
+    let mut tmp = vec![vec![F::zero(); 1 << log_new_n]; num_threads];
     let new_omega = omega.pow_vartime(&[num_threads as u64]);
 
     worker.scope(0, |scope, _| {
@@ -79,7 +79,7 @@ pub fn parallel_fft<F: PrimeField>(
                 let omega_j = omega.pow_vartime(&[j as u64]);
                 let omega_step = omega.pow_vartime(&[(j as u64) << log_new_n]);
 
-                let mut elt = F::ONE;
+                let mut elt = F::one();
                 for (i, tmp) in tmp.iter_mut().enumerate() {
                     for s in 0..num_threads {
                         let idx = (i + (s << log_new_n)) % (1 << log_n);
