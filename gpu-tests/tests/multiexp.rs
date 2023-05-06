@@ -35,8 +35,8 @@ where
 #[test]
 fn gpu_multiexp_consistency() {
     fil_logger::maybe_init();
-    const MAX_LOG_D: usize = 16;
-    const START_LOG_D: usize = 10;
+    const MAX_LOG_D: usize = 24;
+    const START_LOG_D: usize = 19;
     let devices = Device::all();
     let programs = devices
         .iter()

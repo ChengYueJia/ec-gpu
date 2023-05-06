@@ -36,7 +36,7 @@ pub fn gpu_fft_consistency() {
         .expect("Cannot create programs!");
     let mut kern = FftKernel::<Fr>::create(programs).expect("Cannot initialize kernel!");
 
-    for log_d in 1..=20 {
+    for log_d in 19..=24 {
         let d = 1 << log_d;
 
         let mut v1_coeffs = (0..d).map(|_| Fr::random(&mut rng)).collect::<Vec<_>>();
@@ -83,7 +83,7 @@ pub fn gpu_fft_many_consistency() {
         .expect("Cannot create programs!");
     let mut kern = FftKernel::<Fr>::create(programs).expect("Cannot initialize kernel!");
 
-    for log_d in 1..=20 {
+    for log_d in 19..=24 {
         let d = 1 << log_d;
 
         let mut v11_coeffs = (0..d).map(|_| Fr::random(&mut rng)).collect::<Vec<_>>();
