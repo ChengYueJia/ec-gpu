@@ -22,6 +22,7 @@ group = "0.13.0"
 pairing = "0.23.0"
 rand = "0.8"
 rayon = "1.5.3"
+ark-std = { version = "0.3", features = ["print-trace"] }
 
 [build-dependencies]
 blstrs = { version = "0.7.0", features = ["__private_bench"] }
@@ -34,4 +35,8 @@ opencl = ["blstrs/gpu", "ec-gpu-gen/opencl"]
 
 [[bench]]
 name = "multiexp"
+harness = false
+
+[[bench]]
+name = "fft"
 harness = false

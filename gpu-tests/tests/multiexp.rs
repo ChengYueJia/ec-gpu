@@ -2,6 +2,7 @@
 
 use std::sync::Arc;
 use std::time::Instant;
+use ark_std::{end_timer, start_timer};
 
 use blstrs::Bls12;
 use ec_gpu::GpuName;
@@ -37,6 +38,8 @@ fn gpu_multiexp_consistency() {
     fil_logger::maybe_init();
     const MAX_LOG_D: usize = 24;
     const START_LOG_D: usize = 19;
+
+    let start_kern = start_timer!(||"create_FftKernel");
     let devices = Device::all();
     let programs = devices
         .iter()
@@ -45,6 +48,8 @@ fn gpu_multiexp_consistency() {
         .expect("Cannot create programs!");
     let mut kern = MultiexpKernel::<<Bls12 as Engine>::G1Affine>::create(programs, &devices)
         .expect("Cannot initialize kernel!");
+    end_timer!(start_kern);
+
     let pool = Worker::new();
 
     let mut rng = rand::thread_rng();

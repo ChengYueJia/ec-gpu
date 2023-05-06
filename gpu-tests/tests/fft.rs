@@ -1,6 +1,7 @@
 #![cfg(any(feature = "cuda", feature = "opencl"))]
 
 use std::time::Instant;
+use ark_std::{end_timer, start_timer};
 
 use blstrs::Scalar as Fr;
 use ec_gpu_gen::{
@@ -28,6 +29,8 @@ pub fn gpu_fft_consistency() {
 
     let worker = Worker::new();
     let log_threads = worker.log_num_threads();
+
+    let start_kern = start_timer!(||"create_FftKernel");
     let devices = Device::all();
     let programs = devices
         .iter()
@@ -35,6 +38,7 @@ pub fn gpu_fft_consistency() {
         .collect::<Result<_, _>>()
         .expect("Cannot create programs!");
     let mut kern = FftKernel::<Fr>::create(programs).expect("Cannot initialize kernel!");
+    end_timer!(start_kern);
 
     for log_d in 19..=24 {
         let d = 1 << log_d;
@@ -75,6 +79,8 @@ pub fn gpu_fft_many_consistency() {
 
     let worker = Worker::new();
     let log_threads = worker.log_num_threads();
+
+    let start_kern = start_timer!(||"create_FftKernel");
     let devices = Device::all();
     let programs = devices
         .iter()
@@ -82,6 +88,7 @@ pub fn gpu_fft_many_consistency() {
         .collect::<Result<_, _>>()
         .expect("Cannot create programs!");
     let mut kern = FftKernel::<Fr>::create(programs).expect("Cannot initialize kernel!");
+    end_timer!(start_kern);
 
     for log_d in 19..=24 {
         let d = 1 << log_d;
