@@ -38,3 +38,8 @@ harness = false
 [[bench]]
 name = "fft"
 harness = false
+
+# bench fft and create fft_kernal
+[[bench]]
+name = "fft2"
+harness = false

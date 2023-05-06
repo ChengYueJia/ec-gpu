@@ -7,7 +7,7 @@ test_all: ## Run Super Circuit benchmarks
 	@cargo test --no-default-features --features cuda
 
 fft_bench: ## Run Super Circuit benchmarks
-	@cargo bench --bench fft --no-default-features --features cuda
+	@cargo bench --bench fft fft2 --no-default-features --features cuda
 
 msm_bench: ## Run Super Circuit benchmarks
 	@cargo bench --bench multiexp --no-default-features --features cuda
