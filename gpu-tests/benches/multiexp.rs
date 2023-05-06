@@ -15,6 +15,8 @@ use rayon::iter::{IntoParallelIterator, ParallelIterator};
 /// is `2^MAX_K`.
 const MAX_K: u32 = 24;
 const MIN_K: u32 = 19;
+const MAX_ELEMENTS: u32 = 1 << MAX_K;
+
 
 fn bench_multiexp(crit: &mut Criterion) {
     let mut group = crit.benchmark_group("multiexp");
@@ -45,7 +47,7 @@ fn bench_multiexp(crit: &mut Criterion) {
             let (bases, skip) = SourceBuilder::get((Arc::new(max_bases[0..num].to_vec()), 0));
             let exponents = Arc::new(max_exponents[0..num].to_vec());
 
-            bencher.iter(|| {
+            b.iter(|| {
                 black_box(
                     kern.multiexp(&pool, bases.clone(), exponents.clone(), skip)
                         .unwrap(),

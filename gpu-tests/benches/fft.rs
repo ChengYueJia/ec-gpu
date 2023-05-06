@@ -2,9 +2,8 @@
 
 use blstrs::Scalar as Fr;
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
-use ec_gpu_gen::{fft::FftKernel, rust_gpu_tools::Device, threadpool::Worker};
+use ec_gpu_gen::{fft::FftKernel, rust_gpu_tools::Device};
 use ff::{Field, PrimeField};
-use group::Group;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 /// The power that will be used to define the maximum number of elements. The number of elements
 /// is `2^MAX_K`.
