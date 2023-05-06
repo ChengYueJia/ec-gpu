@@ -12,10 +12,9 @@ use pairing::Engine;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 
 /// The power that will be used to define the maximum number of elements. The number of elements
-/// is `2^MAX_ELEMENTS_POWER`.
-const MAX_ELEMENTS_POWER: usize = 29;
-/// The maximum number of elements for this benchmark.
-const MAX_ELEMENTS: usize = 1 << MAX_ELEMENTS_POWER;
+/// is `2^MAX_K`.
+const MAX_K: u32 = 24;
+const MIN_K: u32 = 19;
 
 fn bench_multiexp(crit: &mut Criterion) {
     let mut group = crit.benchmark_group("multiexp");
@@ -40,9 +39,9 @@ fn bench_multiexp(crit: &mut Criterion) {
         .map(|_| <Bls12 as Engine>::Fr::random(rand::thread_rng()).to_repr())
         .collect();
 
-    let num_elements: Vec<_> = (10..MAX_ELEMENTS_POWER).map(|shift| 1 << shift).collect();
-    for num in num_elements {
-        group.bench_with_input(BenchmarkId::from_parameter(num), &num, |bencher, &num| {
+    for k in MIN_K..=MAX_K {
+        let num = 1 << k;
+        group.bench_function(BenchmarkId::new("k", k), |b| {
             let (bases, skip) = SourceBuilder::get((Arc::new(max_bases[0..num].to_vec()), 0));
             let exponents = Arc::new(max_exponents[0..num].to_vec());
 
